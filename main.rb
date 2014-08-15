@@ -34,13 +34,13 @@ helpers do
   def winner(msg)
   	@play_again = true
   	@show_hit_or_stay = false
-  	@success = "<strong>#{session[:player_name]} wins.</strong> #{msg}"
+  	@success = "<strong>#{session[:player_name].capitalize} wins.</strong> #{msg}"
   end
 
   def loser(msg)
   	@play_again = true
   	@show_hit_or_stay = false
-  	@error = "<strong>#{session[:player_name]} loses.</strong> #{msg}"
+  	@error = "<strong>#{session[:player_name].capitalize} loses.</strong> #{msg}"
   end
 
 end
@@ -85,10 +85,10 @@ get '/game' do
 
   player_total = calculate_total(session[:player_cards])
   if player_total == BLACKJACK_AMOUNT
-  	winner("#{session[:player_name]} hit blackjack.")
+  	winner("#{session[:player_name].capitalize} hit blackjack.")
     session[:turn] = "Dealer"
   elsif calculate_total(session[:player_cards]) > 21
-    loser("#{session[:player_name]} busted.")
+    loser("#{session[:player_name].capitalize} busted.")
   end
 
   dealer_total = calculate_total(session[:dealer_cards])
@@ -106,9 +106,9 @@ post '/game/player/hit' do
   session[:player_cards] << session[:deck].pop
   player_total = calculate_total(session[:player_cards])
   if player_total == BLACKJACK_AMOUNT
-  	winner("#{session[:player]} hit blackjack.")
+  	winner("#{session[:player_name].capitalize} hit blackjack.")
   elsif calculate_total(session[:player_cards]) > 21
-  	loser("#{session[:player_name]} busted.")
+  	loser("#{session[:player_name].capitalize} busted.")
   end
   erb :game
 end
@@ -146,9 +146,9 @@ get '/game/compare' do
   player_total = calculate_total(session[:player_cards])
   dealer_total = calculate_total(session[:dealer_cards])
   if player_total < dealer_total
-  	loser("#{session[:player_name]} stayed at #{player_total}. Dealer stayed at #{dealer_total}.")
+  	loser("#{session[:player_name].capitalize} stayed at #{player_total}. Dealer stayed at #{dealer_total}.")
   elsif player_total > dealer_total
-  	winner("#{session[:player_name]} stayed at #{player_total}. Dealer stayed at #{dealer_total}.")
+  	winner("#{session[:player_name].capitalize} stayed at #{player_total}. Dealer stayed at #{dealer_total}.")
   else
   	loser("You tied at #{player_total}. Dealer wins tie.")
   end

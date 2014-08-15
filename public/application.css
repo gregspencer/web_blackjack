@@ -13,3 +13,13 @@ img.card_image {
 
 	margin: 0px 5px 5px 0px;
 }
+
+body {
+	background-color: black; 
+	color: white;
+}
+
+div.well {
+	background-color: gray; 
+	color: white;
+}
