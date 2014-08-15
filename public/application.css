@@ -23,3 +23,7 @@ div.well {
 	background-color: gray; 
 	color: white;
 }
+
+btn {
+	vertical-align: middle;
+}
