@@ -6,6 +6,7 @@ set :sessions, true
 
 BLACKJACK_AMOUNT = 21
 DEALER_MIN_HIT = 17
+INITIAL_POT_AMOUNT = 500
 
 helpers do
   def calculate_total(cards)
@@ -34,12 +35,14 @@ helpers do
   def winner(msg)
   	@play_again = true
   	@show_hit_or_stay = false
+    session[:player_wallet] += session[:player_bet]
   	@success = "<strong>#{session[:player_name].capitalize} wins.</strong> #{msg}"
   end
 
   def loser(msg)
   	@play_again = true
   	@show_hit_or_stay = false
+    session[:player_wallet] -= session[:player_bet]
   	@error = "<strong>#{session[:player_name].capitalize} loses.</strong> #{msg}"
   end
 
@@ -58,6 +61,7 @@ get '/' do
 end
 
 get '/new_player' do
+  session[:player_wallet] = INITIAL_POT_AMOUNT
   erb :new_player
 end
 
@@ -67,9 +71,26 @@ post '/new_player' do
     halt erb(:new_player)
   end
   session[:player_name] = params[:player_name]
-  redirect to '/game'
+  redirect to '/bet'
 end
 
+get '/bet' do
+  session[:player_bet] = nil
+  erb :bet
+end
+
+post '/bet' do
+  if params[:bet_amount].nil? || params[:bet_amount].to_i == 0
+    @error = "Must make a bet."
+    halt erb(:bet)
+  elsif params[:bet_amount].to_i > session[:player_wallet].to_i
+    @error = "You don't have that kind of money. ($#{session[:player_wallet]})"
+    halt erb(:bet)
+  else
+    session[:player_bet] = params[:bet_amount].to_i
+    redirect '/game'
+  end
+end
 get '/game' do
   session[:turn] = session[:player_name]
 
@@ -110,7 +131,7 @@ post '/game/player/hit' do
   elsif calculate_total(session[:player_cards]) > 21
   	loser("#{session[:player_name].capitalize} busted.")
   end
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/player/stay' do
