@@ -1,4 +1,10 @@
 <div id='game'>
+<% if @winner %>
+    <div class="alert alert-success"><%=@winner%></div>
+<% elsif @loser %>
+    <div class="alert alert-error"><%=@loser%></div>
+<% end %>
+
 <h3>BlackJack!</h3>
 <p>Welcome <%= session[:player_name].capitalize %>.</p>
 
@@ -21,7 +27,7 @@
 <% end %>
 <% if @show_dealer_hit_btn %>
 <h4>Dealer has <%= calculate_total(session[:dealer_cards]) %> and will hit.</h4>
-<form action='/game/dealer/hit' method='post'>
+<form id='dealer_hit_form' action='/game/dealer/hit' method='post'>
   <input type='submit' class='btn btn-primary' value='Click to see dealer card &rarr;'>
 <% end %>
 </div>

@@ -36,14 +36,14 @@ helpers do
   	@play_again = true
   	@show_hit_or_stay = false
     session[:player_wallet] += session[:player_bet]
-  	@success = "<strong>#{session[:player_name].capitalize} wins.</strong> #{msg}"
+  	@winner = "<strong>#{session[:player_name].capitalize} wins.</strong> #{msg}"
   end
 
   def loser(msg)
   	@play_again = true
   	@show_hit_or_stay = false
     session[:player_wallet] -= session[:player_bet]
-  	@error = "<strong>#{session[:player_name].capitalize} loses.</strong> #{msg}"
+  	@loser = "<strong>#{session[:player_name].capitalize} loses.</strong> #{msg}"
   end
 
 end
